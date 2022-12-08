@@ -30,26 +30,22 @@ def load_dataset():
     return x, y
 
 def vizualize(x, y, y_hat):
-    plt.scatter(x, y)
-    plt.plot(x, y_hat)
+    plt.scatter(x, y, label="Real Price")
+    plt.plot(x, y_hat, c="green", label="Predicted Price")
+    plt.xlabel("Mileage")
+    plt.ylabel("Price")
+    plt.legend()
     plt.show()
 
-def unormalize_thetas(n_thetas, x, y):
-    x_std = np.std(x)
-    y_std = np.std(y)
-    x_mean = np.mean(x)
-    y_mean = np.mean(y)
-    thetas = np.zeros(n_thetas.shape)
-    thetas[0] = y_std * n_thetas[0] + y_mean - (y_std / x_std) * n_thetas[1] * x_mean
-    thetas[1] = (y_std / x_std) * n_thetas[1]
-    return thetas
 
 def train_model(x, y):
     x_train = normalize(x)
     y_train = normalize(y)
     thetas = np.random.rand(x.shape[1] + 1, 1).reshape(-1, 1)
     myLR = MyLR(thetas=thetas, max_iter=100000)
+    print("Training Started ...")
     myLR.fit_(x_train, y_train)
+    print("Training Done")
     myLR.unormalize_thetas(x, y)
     return myLR
 
@@ -59,6 +55,8 @@ def main():
     except Exception as e:
         print("Error in data loading : ", e)
     model = train_model(x, y)
+    y_hat = model.predict_(x)
+    vizualize(x, y, y_hat)
     save_model(model)
     
 

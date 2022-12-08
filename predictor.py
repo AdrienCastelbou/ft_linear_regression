@@ -21,7 +21,7 @@ def make_prediction(model):
         mileage = float(input("Enter a mileage 🚗 : "))
         x = np.array(mileage).reshape(-1, 1)
         y_hat = model.predict_(x)
-        print(f"The price of your car, with a mileage of {mileage}, can be estimated at {y_hat[0][0]} 🤑")
+        print(f"The price of your car, with a mileage of {mileage}, can be estimated to {y_hat[0][0]} 🤑")
     except ValueError:
         print("Please enter a valid mileage")
     except Exception as e:
