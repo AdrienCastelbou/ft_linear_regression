@@ -4,8 +4,7 @@ def arg_checker(fnc):
     def ckeck_args(*args, **kwargs):
         for arg in args:
             if type(arg) == MyLinearRegression:
-                if type(arg.alpha) != float or type(arg.max_iter) != int or not isinstance(arg.lambda_, (float, int))\
-                    or (arg.penality != None and not arg.penality in arg.supported_penalties) or type(arg.theta) != np.ndarray:
+                if type(arg.alpha) != float or type(arg.max_iter) != int or type(arg.thetas) != np.ndarray:
                     print("Bad params for your model")
                     return None
             else:
@@ -23,6 +22,20 @@ class MyLinearRegression:
             self.alpha = alpha
             self.max_iter = max_iter
             self.thetas = thetas.astype(float)
+        except:
+            return None
+
+
+    def unormalize_thetas(self, x, y):
+        try:
+            x_std = np.std(x)
+            y_std = np.std(y)
+            x_mean = np.mean(x)
+            y_mean = np.mean(y)
+            thetas = np.zeros(self.thetas.shape)
+            thetas[0] = y_std * self.thetas[0] + y_mean - (y_std / x_std) * self.thetas[1] * x_mean
+            thetas[1:] = (y_std / x_std) * self.thetas[1:]
+            self.thetas = thetas
         except:
             return None
 
