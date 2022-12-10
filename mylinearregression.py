@@ -36,9 +36,9 @@ class MyLinearRegression:
             y_std = np.std(y)
             y_mean = np.mean(y)
             thetas = np.zeros(self.thetas.shape)
-            thetas[0] = y_std * self.thetas[0] + y_mean - (y_std / x_stds) * self.thetas[1:] * x_means
-            thetas[1:] = (y_std / x_stds) * self.thetas[1:]
-            print(thetas)
+            for i in range(1, thetas.shape[0]):
+                thetas[i] = (y_std / x_stds[0][i - 1]) * self.thetas[i]
+            thetas[0] = y_std * self.thetas[0] + y_mean - x_means.dot(thetas[1:])
             self.thetas = thetas
         except:
             return None
