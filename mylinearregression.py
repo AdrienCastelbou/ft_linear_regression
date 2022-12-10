@@ -28,13 +28,17 @@ class MyLinearRegression:
 
     def unormalize_thetas(self, x, y):
         try:
-            x_std = np.std(x)
+            x_stds = np.zeros((1, x.shape[1]))
+            x_means = np.zeros((1, x.shape[1]))
+            for i in range(x.shape[1]):
+                x_stds[0][i] = np.std(x[:, i])
+                x_means[0][i] = np.mean(x[:, i])
             y_std = np.std(y)
-            x_mean = np.mean(x)
             y_mean = np.mean(y)
             thetas = np.zeros(self.thetas.shape)
-            thetas[0] = y_std * self.thetas[0] + y_mean - (y_std / x_std) * self.thetas[1] * x_mean
-            thetas[1:] = (y_std / x_std) * self.thetas[1:]
+            thetas[0] = y_std * self.thetas[0] + y_mean - (y_std / x_stds) * self.thetas[1:] * x_means
+            thetas[1:] = (y_std / x_stds) * self.thetas[1:]
+            print(thetas)
             self.thetas = thetas
         except:
             return None
